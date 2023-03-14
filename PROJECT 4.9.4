@@ -28,7 +28,15 @@ while True:
         print ("=============================================")
         print ("Directions from " + (orig) + " to " +(dest))
         print ("Trip Duration:  " + (json_data["route"]["formattedTime"]))
-        print ("Kilometers:     " + str("{:.2f}".format((json_data["route"]["distance"])*1.61)))   
+        print ("Kilometers:     " + str("{:.2f}".format((json_data["route"]["distance"])*1.61)))  
+        kilometer = (json_data["route"]["distance"]*1.61)
+
+    if kilometer <= 322:
+        print("A car will be the best form of travel for this trip.")
+    elif kilometer <= 805:
+        print("A train will be the best form of travel for this trip.")
+    elif kilometer > 805:
+        print("An airplance will be the best form of travel for this trip.")
         print ("=============================================")
      
         for each in json_data["route"]["legs"][0]["maneuvers"]:
