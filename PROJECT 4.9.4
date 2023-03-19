@@ -48,5 +48,19 @@ while True:
         print("For Statuss Code: " + str(json_status)+ "; Refer to:")
         print("https://developer.mapquest.com/documentaion/directions-api/status-codes")
         print("*********************************************************************\n")
+    elif json_status == 612:
+        print("*************************************************")
+        print("Status Code: " + str(json_status) + "; Location not Found.")
+        print("*************************************************\n")
+    elif json_status == 500:
+        print("*************************************************")
+        print("Status Code: " + str(json_status) + "; Error Processing Request.")
+        print("*************************************************\n")
+    else:
+        print("***********************************************************************")
+        print("For Statuss Code: " + str(json_status)+ "; Refer to:")
+        print("https://developer.mapquest.com/documentaion/directions-api/status-codes")
+        print("*********************************************************************\n")
+
 
  
