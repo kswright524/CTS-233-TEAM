@@ -73,6 +73,21 @@ while True:
         print("For Statuss Code: " + str(json_status)+ "; Refer to:")
         print("https://developer.mapquest.com/documentaion/directions-api/status-codes")
         print("*********************************************************************\n")
+        
+   kilometer = (json_data["route"]["distance"]*1.61)
+
+    if kilometer <= 322:
+        print("A car will be the best form of travel for this trip.")
+        print ("===================================================")
+
+    elif kilometer <= 805:
+        print("A train will be the best form of travel for this trip.")
+        print ("=====================================================")
+
+    elif kilometer > 805:
+        print("An airplance will be the best form of travel for this trip.")
+        print ("==========================================================")
+ 
 
 
  
