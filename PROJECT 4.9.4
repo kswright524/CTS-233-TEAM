@@ -87,6 +87,16 @@ while True:
     elif kilometer > 805:
         print("An airplance will be the best form of travel for this trip.")
         print ("==========================================================")
+    
+    
+    distance_km = json_data["route"]["distance"]
+    distance_miles = distance_km * 0.621371
+    uber_cost = distance_miles * 2.00 + 7.00
+    print("Kilometers:     " + str("{:.2f}".format(distance_km)))
+    print("Miles:          " + str("{:.2f}".format(distance_miles)))
+    print("Trip Cost in Uber is:           $" + str("{:.2f}".format(uber_cost)))
+    print("=============================================")  
+   
  
 
 
