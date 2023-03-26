@@ -4,93 +4,97 @@ import requests
 main_api= "https://www.mapquestapi.com/directions/v2/route?"
 
 key = "GPYsRjyWOQygipz9vR3md9PxIwGlhFBj"
+def main():
+    while True:
+        print("Menu")
+        print("1. Destination Directions")
+        print("2. Weather Info" )
+        choice = input("What is your Choice:")
+        if choice == "1":
+            directions()
+        elif choice == "2":
+            weather()
+        else:
+            print("Invalid choice")
+def directions():
+    while True:
+                orig = input("Starting Location: ")
+                if orig == "quit" or orig == "q":
+                    break
+                dest = input ("Destination: ")
+                if dest == "quit" or dest == "q":
+                    break
 
-while True:
-    orig = input("Starting Location: ")
-    if orig == "quit" or orig == "q":
-        break
-    dest = input ("Destination: ")
-    if dest == "quit" or dest == "q":
-        break
+
+                url = main_api + urllib.parse.urlencode ({"key":key, "from":orig, "to":dest})
+                print("URL: " + (url))
+
+                
 
 
-    url = main_api + urllib.parse.urlencode ({"key":key, "from":orig, "to":dest})
-    print("URL: " + (url))
+                json_data = requests.get(url).json()
+                json_status = json_data["info"]["statuscode"]
 
-    
+                if json_status == 0:
+                    print ("API Status: " + str(json_status) + " = A successful route call. \n")
+                    print ("=============================================")
+                    print ("Directions from " + (orig) + " to " +(dest))
+                    print ("Trip Duration:  " + (json_data["route"]["formattedTime"]))
+                    print ("Kilometers:     " + str("{:.2f}".format((json_data["route"]["distance"])*1.61)))  
+                    kilometer = (json_data["route"]["distance"]*1.61)
 
+                    if kilometer <= 322:
+                        print("A car will be the best form of travel for this trip.")
+                        totalkm = kilometer * 84
+                        print(f"The total cost of this trip will be ${totalkm:.2f}")
+                    elif kilometer <= 805:
+                        print("A train will be the best form of travel for this trip.")
+                        totalkm = kilometer * 114
+                        print("The total cost of this trip will be ${totalkm:.2f}" )
+                        print ("=============================================")
+                    elif kilometer > 805:
+                        print("An airplance will be the best form of travel for this trip.")
+                        totalkm = kilometer * 42
+                        print("The total cost of this trip will be ${totalkm:.2f}")
+                        print ("=============================================")
+                    
+                
+                    for each in json_data["route"]["legs"][0]["maneuvers"]:
+                        print((each["narrative"]) + " (" + str("{:.2f}".format((each["distance"])*1.61)+ " km)"))
+                    
+                    print ("==============================================\n")
+                elif json_status == 402:
+                    print("*************************************************")
+                    print("Status Code: " + str(json_status) + "; Invalid user inputs for one or both locations.")
+                    print("*************************************************\n")
+                elif json_status == 611:
+                    print("*************************************************")
+                    print("Status Code: " + str(json_status) + "; Missing an entry for one or both locations.")
+                    print("*************************************************\n")
+                else:
+                    print("***********************************************************************")
+                    print("For Statuss Code: " + str(json_status)+ "; Refer to:")
+                    print("https://developer.mapquest.com/documentaion/directions-api/status-codes")
+                    print("*********************************************************************\n")
 
-    json_data = requests.get(url).json()
-    json_status = json_data["info"]["statuscode"]
+def weather():
+    while True:
+        LOCATION = input("Location: ")
+        if LOCATION == "quit" or LOCATION == "q":
+            break
+        url = f"http://www.mapquestapi.com/weather/v1/location/{LOCATION}?key={key}"
+        print("URL: " + (url))
+        response = requests.get(url)
+        data = response.json()
 
-    if json_status == 0:
-        print ("API Status: " + str(json_status) + " = A successful route call. \n")
-        print ("=============================================")
-        print ("Directions from " + (orig) + " to " +(dest))
-        print ("Trip Duration:  " + (json_data["route"]["formattedTime"]))
-        print ("Kilometers:     " + str("{:.2f}".format((json_data["route"]["distance"])*1.61)))   
-    
-    
-        
-        for each in json_data["route"]["legs"][0]["maneuvers"]:
-            print((each["narrative"]) + " (" + str("{:.2f}".format((each["distance"])*1.61)+ " km)"))
-        
-        print ("==============================================\n")
+        '''current_conditions = data["currentConditions"]
+        temperature = current_conditions["temperature"]
+        humidity = current_conditions["humidity"]
+        wind_speed = current_conditions["windSpeed"]
 
-    
- 
-
-    elif json_status == 402:
-        print("*************************************************")
-        print("Status Code: " + str(json_status) + "; Invalid user inputs for one or both locations.")
-        print("*************************************************\n")
-    elif json_status == 611:
-        print("*************************************************")
-        print("Status Code: " + str(json_status) + "; Missing an entry for one or both locations.")
-        print("*************************************************\n")
-    elif json_status == 612:
-        print("**********************************************************")
-        print("Status Code: " + str(json_status) + "; Location not Found.")
-        print("*************************************************\n")
-    elif json_status == 500:
-        print("*************************************************")
-        print("Status Code: " + str(json_status) + "; Error Processing Request.")
-        print("*************************************************\n")
-    else:
-        print("***********************************************************************")
-        print("For Statuss Code: " + str(json_status)+ "; Refer to:")
-        print("https://developer.mapquest.com/documentaion/directions-api/status-codes")
-        print("*********************************************************************\n")
-    
-    kilometer = (json_data["route"]["distance"]*1.61)
-    
-
-    if kilometer <= 322:
-        cost_car= kilometer * 0.53
-        print("A car will be the best form of travel for this trip and will cost $" + str("{:.2f}".format(cost_car)+ "." ))
-        print ("===================================================")
-
-    elif kilometer <= 805:
-        cost_train = kilometer * .70
-        print("A train will be the best form of travel for this trip and will cost $" + str("{:.2f}".format(cost_train) + "."))
-        print ("=====================================================")
-
-    elif kilometer > 805:
-        cost_plane = kilometer * .11 + 50
-        print("An airplane will be the best form of travel for this trip and will cost $" + str("{:.2f}".format(cost_plane) +"."))
-    
-        print ("==========================================================")
-    
-    
-       
-    
-    
-    distance_km = json_data["route"]["distance"]
-    distance_miles = distance_km * 0.621371
-    uber_cost = distance_miles * 2.00 + 7.00
-    print("Kilometers:     " + str("{:.2f}".format(distance_km)))
-    print("Miles:          " + str("{:.2f}".format(distance_miles)))
-    print("Trip Cost in Uber is:           $" + str("{:.2f}".format(uber_cost)))
-    print("=============================================")
-
-    
+        print(f"Current temperature: {temperature}")
+        print(f"Humidity: {humidity}")
+        print(f"Wind speed: {wind_speed}")
+        '''
+main()
+            
