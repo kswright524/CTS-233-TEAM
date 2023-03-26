@@ -29,12 +29,17 @@ while True:
         print ("Directions from " + (orig) + " to " +(dest))
         print ("Trip Duration:  " + (json_data["route"]["formattedTime"]))
         print ("Kilometers:     " + str("{:.2f}".format((json_data["route"]["distance"])*1.61)))   
-        print ("=============================================")
-     
+    
+    
+        
         for each in json_data["route"]["legs"][0]["maneuvers"]:
-            print((each["narrative"]) + " (" + str("{:.2f})".format((each["distance"])*1.61)+ " km)"))
+            print((each["narrative"]) + " (" + str("{:.2f}".format((each["distance"])*1.61)+ " km)"))
         
         print ("==============================================\n")
+
+    
+ 
+
     elif json_status == 402:
         print("*************************************************")
         print("Status Code: " + str(json_status) + "; Invalid user inputs for one or both locations.")
@@ -51,7 +56,6 @@ while True:
         print("*************************************************")
         print("Status Code: " + str(json_status) + "; Error Processing Request.")
         print("*************************************************\n")
-        
     else:
         print("***********************************************************************")
         print("For Statuss Code: " + str(json_status)+ "; Refer to:")
@@ -59,19 +63,34 @@ while True:
         print("*********************************************************************\n")
     
     kilometer = (json_data["route"]["distance"]*1.61)
+    
 
     if kilometer <= 322:
-        print("A car will be the best form of travel for this trip.")
+        cost_car= kilometer * 0.53
+        print("A car will be the best form of travel for this trip and will cost $" + str("{:.2f}".format(cost_car)+ "." ))
         print ("===================================================")
 
     elif kilometer <= 805:
-        print("A train will be the best form of travel for this trip.")
+        cost_train = kilometer * .70
+        print("A train will be the best form of travel for this trip and will cost $" + str("{:.2f}".format(cost_train) + "."))
         print ("=====================================================")
 
     elif kilometer > 805:
-        print("An airplance will be the best form of travel for this trip.")
+        cost_plane = kilometer * .11 + 50
+        print("An airplane will be the best form of travel for this trip and will cost $" + str("{:.2f}".format(cost_plane) +"."))
+    
         print ("==========================================================")
+    
+    
+       
+    
+    
+    distance_km = json_data["route"]["distance"]
+    distance_miles = distance_km * 0.621371
+    uber_cost = distance_miles * 2.00 + 7.00
+    print("Kilometers:     " + str("{:.2f}".format(distance_km)))
+    print("Miles:          " + str("{:.2f}".format(distance_miles)))
+    print("Trip Cost in Uber is:           $" + str("{:.2f}".format(uber_cost)))
+    print("=============================================")
 
-        
-
- 
+    
